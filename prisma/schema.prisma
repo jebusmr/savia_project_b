@@ -1,0 +1,363 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model address {
+  id             String   @id @default(cuid())
+  street         String
+  exteriorNumber String?
+  interiorNumber String?
+  neighborhood   String?
+  postalCode     String
+  city           String
+  municipality   String?
+  state          String
+  country        String   @default("México")
+  latitude       Float?
+  longitude      Float?
+  references     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  office         office?
+}
+
+model appointment {
+  id           String     @id @default(cuid())
+  patientId    String
+  specialistId String
+  serviceId    String
+  officeId     String?
+  date         DateTime
+  time         String
+  modality     String
+  reason       String
+  status       String     @default("PENDING")
+  notes        String?    @db.Text
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  office       office?    @relation(fields: [officeId], references: [id], map: "Appointment_officeId_fkey")
+  patient      patient    @relation(fields: [patientId], references: [id], map: "Appointment_patientId_fkey")
+  service      service    @relation(fields: [serviceId], references: [id], map: "Appointment_serviceId_fkey")
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "Appointment_specialistId_fkey")
+
+  @@index([officeId], map: "Appointment_officeId_fkey")
+  @@index([patientId], map: "Appointment_patientId_fkey")
+  @@index([serviceId], map: "Appointment_serviceId_fkey")
+  @@index([specialistId], map: "Appointment_specialistId_fkey")
+}
+
+model availability {
+  id           String     @id @default(cuid())
+  specialistId String
+  dayOfWeek    Int
+  startTime    String
+  endTime      String
+  modality     String
+  status       String     @default("ACTIVE")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "Availability_specialistId_fkey")
+
+  @@index([specialistId], map: "Availability_specialistId_fkey")
+}
+
+model availabilityexception {
+  id           String     @id @default(cuid())
+  specialistId String
+  date         DateTime
+  type         String
+  startTime    String?
+  endTime      String?
+  reason       String?    @db.Text
+  status       String     @default("ACTIVE")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "AvailabilityException_specialistId_fkey")
+
+  @@index([specialistId], map: "AvailabilityException_specialistId_fkey")
+}
+
+model office {
+  id               String             @id @default(cuid())
+  name             String
+  phone            String?
+  email            String?
+  website          String?
+  status           String             @default("ACTIVE")
+  addressId        String             @unique(map: "Office_addressId_key")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  appointment      appointment[]
+  address          address            @relation(fields: [addressId], references: [id], map: "Office_addressId_fkey")
+  specialistoffice specialistoffice[]
+}
+
+model patient {
+  id          String        @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String        @unique(map: "Patient_email_key")
+  phone       String
+  dateOfBirth DateTime?
+  status      String        @default("ACTIVE")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  userId      String?       @unique(map: "Patient_userId_key")
+  appointment appointment[]
+  user        user?         @relation(fields: [userId], references: [id], map: "Patient_userId_fkey")
+}
+
+model service {
+  id                String              @id @default(cuid())
+  name              String
+  description       String?             @db.Text
+  durationMinutes   Int?
+  price             Decimal?            @db.Decimal(10, 2)
+  status            String              @default("ACTIVE")
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  appointment       appointment[]
+  specialistservice specialistservice[]
+}
+
+model session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique(map: "Session_tokenHash_key")
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Session_userId_fkey")
+
+  @@index([userId], map: "Session_userId_fkey")
+}
+
+model sociallink {
+  id           String     @id @default(cuid())
+  platform     String
+  url          String
+  specialistId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "SocialLink_specialistId_fkey")
+
+  @@index([specialistId], map: "SocialLink_specialistId_fkey")
+}
+
+model specialist {
+  id                      String                    @id @default(cuid())
+  firstName               String
+  lastName                String
+  title                   String?
+  email                   String                    @unique(map: "Specialist_email_key")
+  phone                   String?
+  status                  String                    @default("ACTIVE")
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  userId                  String?                   @unique(map: "Specialist_userId_key")
+  appointment             appointment[]
+  availability            availability[]
+  availabilityexception   availabilityexception[]
+  sociallink              sociallink[]
+  user                    user?                     @relation(fields: [userId], references: [id], map: "Specialist_userId_fkey")
+  specialistaward         specialistaward[]
+  specialistcertification specialistcertification[]
+  specialisteducation     specialisteducation[]
+  specialistexperience    specialistexperience[]
+  specialistoffice        specialistoffice[]
+  specialistprofile       specialistprofile?
+  specialistservice       specialistservice[]
+  specialistverification  specialistverification?
+  specialty               specialty[]               @relation("specialisttospecialty")
+  specialistattentionarea specialistattentionarea[]
+}
+
+model specialistaward {
+  id           String     @id @default(cuid())
+  specialistId String
+  name         String
+  organization String?
+  year         String?
+  description  String?    @db.Text
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "SpecialistAward_specialistId_fkey")
+
+  @@index([specialistId], map: "SpecialistAward_specialistId_fkey")
+}
+
+model specialistcertification {
+  id           String     @id @default(cuid())
+  specialistId String
+  name         String
+  organization String
+  year         String
+  description  String?    @db.Text
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "SpecialistCertification_specialistId_fkey")
+
+  @@index([specialistId], map: "SpecialistCertification_specialistId_fkey")
+}
+
+model specialisteducation {
+  id           String     @id @default(cuid())
+  specialistId String
+  degree       String
+  institution  String
+  year         String?
+  description  String?    @db.Text
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "SpecialistEducation_specialistId_fkey")
+
+  @@index([specialistId], map: "SpecialistEducation_specialistId_fkey")
+}
+
+model specialistexperience {
+  id           String     @id @default(cuid())
+  specialistId String
+  position     String
+  institution  String
+  startYear    String
+  endYear      String?
+  current      Boolean    @default(false)
+  description  String?    @db.Text
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "SpecialistExperience_specialistId_fkey")
+
+  @@index([specialistId], map: "SpecialistExperience_specialistId_fkey")
+}
+
+model specialistoffice {
+  id           String     @id @default(cuid())
+  specialistId String
+  officeId     String
+  isPrimary    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  office       office     @relation(fields: [officeId], references: [id], map: "SpecialistOffice_officeId_fkey")
+  specialist   specialist @relation(fields: [specialistId], references: [id], map: "SpecialistOffice_specialistId_fkey")
+
+  @@unique([specialistId, officeId], map: "SpecialistOffice_specialistId_officeId_key")
+  @@index([officeId], map: "SpecialistOffice_officeId_fkey")
+}
+
+model specialistprofile {
+  id              String     @id @default(cuid())
+  biography       String?    @db.Text
+  yearsExperience Int?
+  university      String?
+  specialtySchool String?
+  certifications  String?    @db.Text
+  awards          String?    @db.Text
+  languages       String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  specialistId    String     @unique(map: "SpecialistProfile_specialistId_key")
+  approach        String?    @db.Text
+  philosophy      String?    @db.Text
+  specialist      specialist @relation(fields: [specialistId], references: [id], map: "SpecialistProfile_specialistId_fkey")
+}
+
+model specialistservice {
+  id              String     @id @default(cuid())
+  specialistId    String
+  serviceId       String
+  price           Decimal?   @db.Decimal(10, 2)
+  durationMinutes Int?
+  status          String     @default("ACTIVE")
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  service         service    @relation(fields: [serviceId], references: [id], map: "SpecialistService_serviceId_fkey")
+  specialist      specialist @relation(fields: [specialistId], references: [id], map: "SpecialistService_specialistId_fkey")
+
+  @@unique([specialistId, serviceId], map: "SpecialistService_specialistId_serviceId_key")
+  @@index([serviceId], map: "SpecialistService_serviceId_fkey")
+}
+
+model specialistverification {
+  id                  String     @id @default(cuid())
+  professionalLicense String?
+  specialtyLicense    String?
+  identityVerified    Boolean    @default(false)
+  licenseVerified     Boolean    @default(false)
+  specialtyVerified   Boolean    @default(false)
+  documentsVerified   Boolean    @default(false)
+  verificationStatus  String     @default("PENDING")
+  verifiedAt          DateTime?
+  verifiedBy          String?
+  notes               String?    @db.Text
+  specialistId        String     @unique(map: "SpecialistVerification_specialistId_key")
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  specialist          specialist @relation(fields: [specialistId], references: [id], map: "SpecialistVerification_specialistId_fkey")
+}
+
+model specialty {
+  id            String          @id @default(cuid())
+  name          String          @unique(map: "Specialty_name_key")
+  slug          String          @unique(map: "Specialty_slug_key")
+  shortName     String?
+  description   String?
+  icon          String?
+  color         String?
+  order         Int             @default(0)
+  status        String          @default("ACTIVE")
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  specialist    specialist[]    @relation("specialisttospecialty")
+  attentionarea attentionarea[]
+}
+
+model user {
+  id           String      @id @default(cuid())
+  email        String      @unique(map: "User_email_key")
+  passwordHash String
+  role         String      @default("PATIENT")
+  status       String      @default("ACTIVE")
+  lastLoginAt  DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  patient      patient?
+  session      session[]
+  specialist   specialist?
+}
+
+model attentionarea {
+  id          String   @id @default(cuid())
+  specialtyId String
+  name        String
+  slug        String
+  description String?
+  order       Int      @default(0)
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  specialty               specialty                 @relation(fields: [specialtyId], references: [id], map: "AttentionArea_specialtyId_fkey")
+  specialistattentionarea specialistattentionarea[]
+
+  @@unique([specialtyId, slug])
+  @@index([specialtyId])
+}
+
+model specialistattentionarea {
+  id              String   @id @default(cuid())
+  specialistId    String
+  attentionAreaId String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  specialist    specialist    @relation(fields: [specialistId], references: [id], map: "SpecialistAttentionArea_specialistId_fkey")
+  attentionarea attentionarea @relation(fields: [attentionAreaId], references: [id], map: "SpecialistAttentionArea_attentionAreaId_fkey")
+
+  @@unique([specialistId, attentionAreaId])
+  @@index([specialistId])
+  @@index([attentionAreaId])
+}
