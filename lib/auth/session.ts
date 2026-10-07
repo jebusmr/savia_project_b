@@ -77,6 +77,7 @@ export async function getCurrentUser() {
             specialist: {
               include: {
                 specialty: true,
+                specialistverification: true,
               },
             },
           },

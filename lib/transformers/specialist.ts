@@ -80,6 +80,11 @@ interface DatabaseSpecialist {
       name: string;
       phone: string | null;
       email: string | null;
+      hasParking: boolean;
+      issuesInvoice: boolean;
+      acceptsCash: boolean;
+      acceptsCard: boolean;
+      acceptsTransfer: boolean;
       address: {
         street: string;
         exteriorNumber: string | null;
@@ -403,11 +408,31 @@ export function transformSpecialist(
 
       mapEmbedUrl: "",
 
-      parking: false,
+      parking:
+        primaryOffice?.office.hasParking ??
+        false,
+
+      issuesInvoice:
+        primaryOffice?.office.issuesInvoice ??
+        false,
+
+      acceptsCash:
+        primaryOffice?.office.acceptsCash ??
+        false,
+
+      acceptsCard:
+        primaryOffice?.office.acceptsCard ??
+        false,
+
+      acceptsTransfer:
+        primaryOffice?.office.acceptsTransfer ??
+        false,
 
       wheelchairAccess: false,
 
-      acceptsCards: false,
+      acceptsCards:
+        primaryOffice?.office.acceptsCard ??
+        false,
     },
 
     gallery: [],

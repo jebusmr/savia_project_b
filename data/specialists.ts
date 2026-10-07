@@ -141,9 +141,11 @@ verification: {
     "https://www.google.com/maps/embed?...",
 
   parking: true,
-
+  issuesInvoice: true,
+  acceptsCash: true,
+  acceptsCard: true,
+  acceptsTransfer: true,
   wheelchairAccess: true,
-
   acceptsCards: true,
 },
 

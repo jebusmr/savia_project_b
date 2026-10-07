@@ -105,6 +105,10 @@ export interface Location {
   mapEmbedUrl: string;
 
   parking: boolean;
+  issuesInvoice: boolean;
+  acceptsCash: boolean;
+  acceptsCard: boolean;
+  acceptsTransfer: boolean;
   wheelchairAccess: boolean;
   acceptsCards: boolean;
 }

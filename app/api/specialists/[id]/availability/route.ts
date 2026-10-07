@@ -1,10 +1,47 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth/session";
 
 interface RouteContext {
   params: Promise<{
     id: string;
   }>;
+}
+
+async function authorizeSpecialist(
+  specialistId: string
+) {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return {
+      authorized: false,
+      status: 401,
+      error: "Debes iniciar sesión.",
+    };
+  }
+
+  const isProfessional =
+    user.role === "SPECIALIST" ||
+    user.role === "PROFESSIONAL";
+
+  if (
+    !isProfessional ||
+    !user.specialist ||
+    user.specialist.id !== specialistId
+  ) {
+    return {
+      authorized: false,
+      status: 403,
+      error:
+        "No tienes autorización para modificar esta disponibilidad.",
+    };
+  }
+
+  return {
+    authorized: true,
+    user,
+  };
 }
 
 export async function GET(
@@ -393,6 +430,19 @@ export async function POST(
 ) {
   try {
     const { id } = await context.params;
+    const authorization =
+      await authorizeSpecialist(id);
+
+    if (!authorization.authorized) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: authorization.error,
+        },
+        { status: authorization.status }
+      );
+    }
+
     const body = await request.json();
 
     const {
@@ -402,6 +452,7 @@ export async function POST(
       modality,
     } = body;
 
+    // Validar campos obligatorios
     if (
       dayOfWeek === undefined ||
       !startTime ||
@@ -418,17 +469,64 @@ export async function POST(
       );
     }
 
-    if (dayOfWeek < 0 || dayOfWeek > 6) {
+    // Validar el día de la semana
+    if (
+      !Number.isInteger(dayOfWeek) ||
+      dayOfWeek < 0 ||
+      dayOfWeek > 6
+    ) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "dayOfWeek debe estar entre 0 y 6.",
+            "dayOfWeek debe ser un número entero entre 0 y 6.",
         },
         { status: 400 }
       );
     }
 
+    // Validar formato HH:MM
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+    if (
+      !timeRegex.test(startTime) ||
+      !timeRegex.test(endTime)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Las horas deben tener el formato HH:MM.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Convertir las horas a minutos
+    const timeToMinutes = (time: string): number => {
+      const [hours, minutes] = time
+        .split(":")
+        .map(Number);
+
+      return hours * 60 + minutes;
+    };
+
+    const startMinutes = timeToMinutes(startTime);
+    const endMinutes = timeToMinutes(endTime);
+
+    // Validar que la hora final sea posterior
+    if (endMinutes <= startMinutes) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "La hora de finalización debe ser posterior a la hora de inicio.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Comprobar que exista el especialista
     const specialist =
       await prisma.specialist.findUnique({
         where: {
@@ -446,6 +544,31 @@ export async function POST(
       );
     }
 
+    // Comprobar si ya existe un horario idéntico
+    const existingAvailability =
+      await prisma.availability.findFirst({
+        where: {
+          specialistId: id,
+          dayOfWeek,
+          startTime,
+          endTime,
+          modality,
+          status: "ACTIVE",
+        },
+      });
+
+    if (existingAvailability) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Este horario ya está registrado para el especialista.",
+        },
+        { status: 409 }
+      );
+    }
+
+    // Crear la disponibilidad
     const availability =
       await prisma.availability.create({
         data: {
@@ -475,6 +598,280 @@ export async function POST(
         success: false,
         error:
           "No fue posible guardar la disponibilidad.",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(
+  request: Request,
+  context: RouteContext
+) {
+  try {
+    const { id } = await context.params;
+    const authorization =
+      await authorizeSpecialist(id);
+
+    if (!authorization.authorized) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: authorization.error,
+        },
+        { status: authorization.status }
+      );
+    }
+
+    const body = await request.json();
+
+    const {
+      availabilityId,
+      dayOfWeek,
+      startTime,
+      endTime,
+      modality,
+    } = body;
+
+    // Validar campos obligatorios
+    if (
+      !availabilityId ||
+      dayOfWeek === undefined ||
+      !startTime ||
+      !endTime ||
+      !modality
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "availabilityId, dayOfWeek, startTime, endTime y modality son obligatorios.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Validar el día de la semana
+    if (
+      !Number.isInteger(dayOfWeek) ||
+      dayOfWeek < 0 ||
+      dayOfWeek > 6
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "dayOfWeek debe ser un número entero entre 0 y 6.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Validar formato HH:MM
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+    if (
+      !timeRegex.test(startTime) ||
+      !timeRegex.test(endTime)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Las horas deben tener el formato HH:MM.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Convertir las horas a minutos
+    const timeToMinutes = (time: string): number => {
+      const [hours, minutes] = time
+        .split(":")
+        .map(Number);
+
+      return hours * 60 + minutes;
+    };
+
+    const startMinutes = timeToMinutes(startTime);
+    const endMinutes = timeToMinutes(endTime);
+
+    // Validar el rango de horario
+    if (endMinutes <= startMinutes) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "La hora de finalización debe ser posterior a la hora de inicio.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Buscar el horario del especialista
+    const existingAvailability =
+      await prisma.availability.findFirst({
+        where: {
+          id: availabilityId,
+          specialistId: id,
+        },
+      });
+
+    if (!existingAvailability) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "El horario no existe o no pertenece a este especialista.",
+        },
+        { status: 404 }
+      );
+    }
+
+    // Comprobar duplicados
+    const duplicateAvailability =
+      await prisma.availability.findFirst({
+        where: {
+          specialistId: id,
+          dayOfWeek,
+          startTime,
+          endTime,
+          modality,
+          status: "ACTIVE",
+          NOT: {
+            id: availabilityId,
+          },
+        },
+      });
+
+    if (duplicateAvailability) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Ya existe otro horario con estos mismos datos.",
+        },
+        { status: 409 }
+      );
+    }
+
+    // Actualizar el horario
+    const availability =
+      await prisma.availability.update({
+        where: {
+          id: availabilityId,
+        },
+        data: {
+          dayOfWeek,
+          startTime,
+          endTime,
+          modality,
+        },
+      });
+
+    return NextResponse.json({
+      success: true,
+      data: availability,
+    });
+  } catch (error) {
+    console.error(
+      "Error actualizando disponibilidad:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          "No fue posible actualizar la disponibilidad.",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  context: RouteContext
+) {
+  try {
+    const { id } = await context.params;
+    const authorization =
+      await authorizeSpecialist(id);
+
+    if (!authorization.authorized) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: authorization.error,
+        },
+        { status: authorization.status }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+
+    const availabilityId =
+      searchParams.get("availabilityId");
+
+    if (!availabilityId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "availabilityId es obligatorio.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Comprobar que el horario pertenece al especialista
+    const existingAvailability =
+      await prisma.availability.findFirst({
+        where: {
+          id: availabilityId,
+          specialistId: id,
+        },
+      });
+
+    if (!existingAvailability) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "El horario no existe o no pertenece a este especialista.",
+        },
+        { status: 404 }
+      );
+    }
+
+    // Desactivar el horario en lugar de eliminarlo
+    const availability =
+      await prisma.availability.update({
+        where: {
+          id: availabilityId,
+        },
+        data: {
+          status: "INACTIVE",
+        },
+      });
+
+    return NextResponse.json({
+      success: true,
+      message: "Horario desactivado correctamente.",
+      data: availability,
+    });
+  } catch (error) {
+    console.error(
+      "Error eliminando disponibilidad:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          "No fue posible eliminar la disponibilidad.",
       },
       { status: 500 }
     );

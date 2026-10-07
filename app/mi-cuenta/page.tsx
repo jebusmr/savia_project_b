@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { getCurrentUser } from "@/lib/auth/session";
 import LogoutButton from "@/components/auth/LogoutButton";
+import AvailabilityManager from "@/components/professional/AvailabilityManager";
+import VerificationStatus from "@/components/professional/VerificationStatus";
 
 interface Appointment {
   id: string;
@@ -20,11 +22,25 @@ export default async function MiCuentaPage() {
     redirect("/login");
   }
 
+  if (user.role === "ADMIN") {
+    redirect("/admin");
+  }
+
   // --------------------------------------------------
   // 2. Panel profesional
   // --------------------------------------------------
 
-  if (user.role === "PROFESSIONAL" && user.specialist) {
+  if (
+    (user.role === "SPECIALIST" || user.role === "PROFESSIONAL") &&
+    user.specialist
+  ) {
+    const verificationStatus =
+      user.specialist.specialistverification?.verificationStatus ??
+      "PENDING";
+
+    const verificationNotes =
+      user.specialist.specialistverification?.notes ?? "";
+
     let appointments: Appointment[] = [];
 
     try {
@@ -71,7 +87,6 @@ export default async function MiCuentaPage() {
           ------------------------------------------------ */}
 
           <div className="mb-8 flex items-center justify-between">
-
             <div>
               <img
                 src="/images/logo.jpeg"
@@ -81,7 +96,6 @@ export default async function MiCuentaPage() {
             </div>
 
             <LogoutButton />
-
           </div>
 
           {/* ------------------------------------------------
@@ -240,7 +254,7 @@ export default async function MiCuentaPage() {
                   </p>
 
                   <span className="mt-3 inline-block text-xs font-medium text-emerald-600">
-                    Próximamente
+                    Administrar horarios más abajo
                   </span>
 
                 </div>
@@ -248,6 +262,14 @@ export default async function MiCuentaPage() {
               </div>
 
             </div>
+
+            {/* ------------------------------------------------
+                ADMINISTRACIÓN DE DISPONIBILIDAD
+            ------------------------------------------------ */}
+
+            <AvailabilityManager
+              specialistId={user.specialist.id}
+            />
 
             {/* ------------------------------------------------
                 INFORMACIÓN DEL PERFIL
@@ -259,30 +281,28 @@ export default async function MiCuentaPage() {
                 Información de mi perfil
               </h2>
 
-              <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-6">
-
-                <p className="text-sm text-gray-600">
-                  Estado de verificación
-                </p>
-
-                <p className="mt-1 font-semibold text-amber-700">
-                  Pendiente
-                </p>
-
-                <p className="mt-3 text-sm text-gray-600">
-                  Completa y revisa la información de tu perfil
-                  profesional para avanzar en el proceso de
-                  validación de SAVIA.
-                </p>
-
-                <Link
-                  href={`/profesionales/${user.specialist.id}/perfil`}
-                  className="mt-5 inline-flex rounded-xl bg-[#17365D] px-5 py-3 font-semibold text-white transition hover:bg-[#102A49]"
-                >
-                  Completar / editar perfil
-                </Link>
-
+              <div className="mt-5">
+                <VerificationStatus
+                  specialistId={user.specialist.id}
+                  status={verificationStatus}
+                  notes={verificationNotes}
+                />
               </div>
+
+            </div>
+
+            {/* ------------------------------------------------
+                EDITAR PERFIL
+            ------------------------------------------------ */}
+
+            <div className="mt-6">
+
+              <Link
+                href={`/profesionales/${user.specialist.id}/perfil`}
+                className="inline-flex rounded-xl bg-[#17365D] px-5 py-3 font-semibold text-white transition hover:bg-[#102A49]"
+              >
+                Completar / editar perfil
+              </Link>
 
             </div>
 

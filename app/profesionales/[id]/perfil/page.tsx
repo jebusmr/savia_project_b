@@ -9,6 +9,7 @@ import CertificationManager from "@/components/professional/CertificationManager
 import AwardManager from "@/components/professional/AwardManager";
 import ServiceManager from "@/components/professional/ServiceManager";
 import AttentionAreaManager from "@/components/professional/AttentionAreaManager";
+import OfficeManager from "@/components/professional/OfficeManager";
 
 interface PageProps {
   params: Promise<{
@@ -28,7 +29,7 @@ export default async function EditarPerfilProfesionalPage({
   }
 
   if (
-    user.role !== "PROFESSIONAL" ||
+    (user.role !== "SPECIALIST" && user.role !== "PROFESSIONAL") ||
     !user.specialist ||
     user.specialist.id !== id
   ) {
@@ -156,6 +157,8 @@ export default async function EditarPerfilProfesionalPage({
             specialistId={id}
             specialtyId={specialist?.specialty?.[0]?.id}
           />
+
+          <OfficeManager specialistId={id} />
 
         </div>
       </div>

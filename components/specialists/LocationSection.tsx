@@ -6,6 +6,9 @@ import {
   Car,
   Accessibility,
   CreditCard,
+  Receipt,
+  Banknote,
+  Landmark,
   ExternalLink,
 } from "lucide-react";
 
@@ -41,10 +44,10 @@ export default function LocationSection({
                 src={location.officeImage}
                 alt={location.officeName}
                 fill
-              className="object-cover"
-            />
-        </div>
-        )}
+                className="object-cover"
+              />
+            </div>
+          )}
 
           <div className="p-6">
 
@@ -104,49 +107,73 @@ export default function LocationSection({
 
         </div>
 
-        {/* SERVICIOS */}
+        {/* SERVICIOS Y FORMAS DE PAGO */}
 
-        {/* SERVICIOS DEL CONSULTORIO */}
+        {(location.parking ||
+          location.wheelchairAccess ||
+          location.issuesInvoice ||
+          location.acceptsCash ||
+          location.acceptsCard ||
+          location.acceptsTransfer) && (
+          <div className="mt-6">
 
-{(location.parking ||
-  location.wheelchairAccess ||
-  location.acceptsCards) && (
-  <div className="mt-6">
+            <InfoCard
+              icon={<MapPin className="h-5 w-5" />}
+              title="Servicios y formas de pago"
+            >
 
-    <InfoCard
-      icon={<MapPin className="h-5 w-5" />}
-      title="Servicios del consultorio"
-    >
-      <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3">
 
-        {location.parking && (
-          <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
-            <Car className="h-4 w-4" />
-            Estacionamiento
-          </span>
+                {location.parking && (
+                  <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
+                    <Car className="h-4 w-4" />
+                    Estacionamiento
+                  </span>
+                )}
+
+                {location.wheelchairAccess && (
+                  <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
+                    <Accessibility className="h-4 w-4" />
+                    Acceso universal
+                  </span>
+                )}
+
+                {location.issuesInvoice && (
+                  <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
+                    <Receipt className="h-4 w-4" />
+                    Emite factura
+                  </span>
+                )}
+
+                {location.acceptsCash && (
+                  <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
+                    <Banknote className="h-4 w-4" />
+                    Pago en efectivo
+                  </span>
+                )}
+
+                {location.acceptsCard && (
+                  <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
+                    <CreditCard className="h-4 w-4" />
+                    Pago con tarjeta
+                  </span>
+                )}
+
+                {location.acceptsTransfer && (
+                  <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
+                    <Landmark className="h-4 w-4" />
+                    Pago por transferencia
+                  </span>
+                )}
+
+              </div>
+
+            </InfoCard>
+
+          </div>
         )}
 
-        {location.wheelchairAccess && (
-          <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
-            <Accessibility className="h-4 w-4" />
-            Acceso universal
-          </span>
-        )}
-
-        {location.acceptsCards && (
-          <span className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
-            <CreditCard className="h-4 w-4" />
-            Pago con tarjeta
-          </span>
-        )}
-
-      </div>
-    </InfoCard>
-
-  </div>
-)}
-
-               {/* MAPA */}
+        {/* MAPA */}
 
         {location.mapEmbedUrl && (
           <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">

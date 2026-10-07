@@ -88,6 +88,11 @@ model office {
   phone            String?
   email            String?
   website          String?
+  hasParking       Boolean            @default(false)
+  issuesInvoice    Boolean            @default(false)
+  acceptsCash      Boolean            @default(true)
+  acceptsCard      Boolean            @default(false)
+  acceptsTransfer  Boolean            @default(false)
   status           String             @default("ACTIVE")
   addressId        String             @unique(map: "Office_addressId_key")
   createdAt        DateTime           @default(now())

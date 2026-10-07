@@ -9,7 +9,9 @@
     "lint": "eslint",
     "verify:test-specialist": "tsx scripts/verify-specialist.ts",
     "sync:specialties": "tsx scripts/sync-specialties.ts",
-    "sync:attention-areas": "tsx scripts/sync-attention-areas.ts"
+    "sync:attention-areas": "tsx scripts/sync-attention-areas.ts",
+    "create:admin": "tsx scripts/create-admin.ts",
+    "fix:carlos-verification": "tsx scripts/fix-carlos-verification.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",
