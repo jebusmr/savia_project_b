@@ -1,215 +1,189 @@
 import Link from "next/link";
 import {
-  HeartPulse,
-  Brain,
-  Baby,
-  VenusAndMars,
-  Apple,
-  Smile,
-  Bone,
   Stethoscope,
-  Ear,
-  Eye,
-  Scissors,
-  Droplets,
-  Utensils,
-  Sparkles,
-  Activity,
-  Syringe,
+  FlaskConical,
+  PawPrint,
+  TriangleAlert,
+  ArrowRight,
+  HeartHandshake,
+  Globe,
 } from "lucide-react";
 
-const healthAreas = [
+const huellitasSections = [
   {
-    title: "Salud cardiovascular",
+    title: "Veterinarios y clínicas",
     description:
-      "Prevención, cuidado y atención de enfermedades relacionadas con el corazón y la circulación.",
-    icon: HeartPulse,
-    href: "/areas_salud/salud_cardiovascular",
-  },
-  {
-    title: "Salud mental",
-    description:
-      "Bienestar emocional, psicológico y atención profesional para diferentes etapas de la vida.",
-    icon: Brain,
-    href: "/areas_salud/salud_mental",
-  },
-  {
-    title: "Salud infantil",
-    description:
-      "Cuidado y atención de niñas, niños y adolescentes durante sus diferentes etapas de desarrollo.",
-    icon: Baby,
-    href: "/areas_salud/salud_infantil",
-  },
-  {
-    title: "Salud de la mujer",
-    description:
-      "Atención integral de la salud de la mujer en las diferentes etapas de la vida.",
-    icon: VenusAndMars,
-    href: "/areas_salud/salud_mujer",
-  },
-  {
-    title: "Salud nutricional",
-    description:
-      "Alimentación, nutrición y orientación profesional para favorecer el bienestar y la salud.",
-    icon: Apple,
-    href: "/areas_salud/salud_nutricional",
-  },
-  {
-    title: "Salud bucal",
-    description:
-      "Prevención, cuidado y atención de la boca, dientes y estructuras relacionadas.",
-    icon: Smile,
-    href: "/areas_salud/salud_bucal",
-  },
-  {
-    title: "Salud musculoesquelética",
-    description:
-      "Cuidado de huesos, músculos, articulaciones y movimiento corporal.",
-    icon: Bone,
-    href: "/areas_salud/salud_musculoesqueletica",
-  },
-  {
-    title: "Salud digestiva",
-    description:
-      "Prevención y atención de problemas relacionados con el sistema digestivo.",
-    icon: Utensils,
-    href: "/areas_salud/salud_digestiva",
-  },
-  {
-    title: "Salud renal",
-    description:
-      "Prevención, cuidado y atención de las enfermedades relacionadas con los riñones.",
-    icon: Droplets,
-    href: "/areas_salud/salud_renal",
-  },
-  {
-    title: "Salud de la piel",
-    description:
-      "Cuidado, prevención y atención de enfermedades y condiciones de la piel.",
-    icon: Sparkles,
-    href: "/areas_salud/salud_piel",
-  },
-  {
-    title: "Salud visual",
-    description:
-      "Prevención y atención de la visión y de las diferentes condiciones oculares.",
-    icon: Eye,
-    href: "/areas_salud/salud_visual",
-  },
-  {
-    title: "Salud auditiva",
-    description:
-      "Cuidado y atención de la audición, el oído y estructuras relacionadas.",
-    icon: Ear,
-    href: "/areas_salud/salud_auditiva",
-  },
-  {
-    title: "Medicina general",
-    description:
-      "Atención integral, orientación y seguimiento de las necesidades generales de salud.",
+      "Encuentra veterinarios, consultorios y clínicas para el cuidado y atención de tu mascota.",
     icon: Stethoscope,
-    href: "/areas_salud/medicina_general",
+    href: "/areas_salud/veterinarios",
+    action: "Buscar veterinario",
   },
   {
-    title: "Cirugía",
+    title: "Laboratorios y diagnóstico",
     description:
-      "Información y acceso a profesionales relacionados con diferentes procedimientos quirúrgicos.",
-    icon: Scissors,
-    href: "/areas_salud/cirugia",
+      "Consulta laboratorios y servicios de análisis para apoyar el diagnóstico y cuidado de tu mascota.",
+    icon: FlaskConical,
+    href: "/areas_salud/laboratorios",
+    action: "Buscar laboratorio",
   },
   {
-    title: "Anestesiología",
+    title: "Servicios para mascotas",
     description:
-      "Atención especializada relacionada con anestesia, procedimientos y cuidados perioperatorios.",
-    icon: Syringe,
-    href: "/areas_salud/anestesiologia",
+      "Encuentra estéticas, hospedaje, entrenamiento, cuidadores y otros servicios para el bienestar de tu mascota.",
+    icon: PawPrint,
+    href: "/areas_salud/servicios",
+    action: "Ver servicios",
   },
   {
-    title: "Especialidades clínicas",
+    title: "Atención veterinaria",
     description:
-      "Explora diferentes especialidades médicas para necesidades específicas de atención.",
-    icon: Activity,
-    href: "/areas_salud/especialidades_clinicas",
+      "Encuentra opciones de atención veterinaria y servicios de atención urgente para tu mascota.",
+    icon: TriangleAlert,
+    href: "/areas_salud/atencion-veterinaria",
+    action: "Buscar atención",
   },
 ];
 
 export default function AreasSaludPage() {
   return (
     <main className="bg-white">
-      <section className="bg-gradient-to-br from-[#203564] via-[#27467c] to-[#2f6f62]">
-        <div className="mx-auto max-w-7xl px-6 py-20 text-center md:py-24">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-200">
-            Salud
-          </p>
 
-          <h1 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-5xl">
-            Áreas de salud
+    {/* Hero */}
+    <section
+      className="relative overflow-hidden bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: "url('/images/huellitas/banner-huellitas.jpeg')",
+      }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-r from-[#203564]/80 via-[#203564]/35 to-transparent" />
+
+      <div className="relative mx-auto max-w-7xl px-6 py-20 md:py-24">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-[#203564]/45 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm">
+            <PawPrint className="h-4 w-4" />
+            SAVIA Huellitas
+          </div>
+
+          <h1 className="mt-6 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+            Cuidado y bienestar para nuestras huellitas
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-blue-50 md:text-lg">
-            Explora las diferentes áreas de salud que forman parte de SAVIA.
-            Encuentra información, profesionales y recursos relacionados con
-            tus necesidades de atención y bienestar.
+          <p className="mt-6 max-w-2xl text-base leading-7 text-white drop-shadow-sm md:text-lg">
+            Un espacio para encontrar profesionales, establecimientos y
+            servicios relacionados con el cuidado y bienestar de las
+            mascotas en La Piedad y la región.
           </p>
+        </div>
+      </div>
+    </section>
+
+      {/* Categorías */}
+      <section className="bg-[#f8faf9]">
+        <div className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
+              Encuentra lo que necesitas
+            </p>
+
+            <h2 className="mt-3 text-3xl font-bold text-[#203564] md:text-4xl">
+              Servicios para nuestras mascotas
+            </h2>
+
+            <p className="mt-4 leading-7 text-gray-600">
+              Explora las diferentes opciones de atención, diagnóstico y
+              servicios disponibles para el cuidado de tus mascotas.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {huellitasSections.map((section) => {
+              const Icon = section.icon;
+
+              return (
+                <Link
+                  key={section.title}
+                  href={section.href}
+                  className="group rounded-2xl border border-gray-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
+                >
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 transition-colors group-hover:bg-emerald-100">
+                    <Icon className="h-7 w-7" />
+                  </div>
+
+                  <h3 className="mt-6 text-2xl font-semibold text-[#203564]">
+                    {section.title}
+                  </h3>
+
+                  <p className="mt-3 max-w-xl text-sm leading-6 text-gray-600">
+                    {section.description}
+                  </p>
+
+                  <div className="mt-6 inline-flex items-center rounded-xl bg-[#203564] px-5 py-3 text-sm font-semibold text-white transition-colors group-hover:bg-[#16284d]">
+                    {section.action}
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold text-[#203564] md:text-4xl">
-            Explora un área de salud
-          </h2>
-
-          <p className="mt-4 text-gray-600">
-            Cada área reúne diferentes especialidades, servicios y recursos
-            relacionados con la atención y el cuidado de la salud.
-          </p>
-        </div>
-
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {healthAreas.map((area) => {
-            const Icon = area.icon;
-
-            return (
-              <Link
-                key={area.title}
-                href={area.href}
-                className="group rounded-2xl border border-gray-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 transition-colors group-hover:bg-emerald-100">
-                  <Icon className="h-6 w-6" />
+      {/* Anunciantes */}
+      <section className="border-y border-emerald-100 bg-emerald-50/70">
+        <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
+          <div className="rounded-3xl border border-emerald-100 bg-white p-8 shadow-sm md:p-10">
+            <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-2xl">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                  <HeartHandshake className="h-6 w-6" />
                 </div>
 
-                <h3 className="mt-6 text-xl font-semibold text-[#203564]">
-                  {area.title}
-                </h3>
+                <h2 className="mt-6 text-2xl font-bold text-[#203564] md:text-3xl">
+                  ¿Tienes un servicio para mascotas?
+                </h2>
 
-                <p className="mt-3 text-sm leading-6 text-gray-600">
-                  {area.description}
+                <p className="mt-4 leading-7 text-gray-600">
+                  También puedes formar parte de la comunidad SAVIA. Abrimos
+                  este espacio para veterinarios, clínicas, laboratorios,
+                  estéticas, cuidadores, hospedajes, entrenadores y otros
+                  servicios para mascotas.
                 </p>
+              </div>
 
-                <span className="mt-6 inline-flex items-center text-sm font-semibold text-emerald-700">
-                  Explorar área
-                  <span className="ml-2 transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
-                </span>
-              </Link>
-            );
-          })}
+              <div className="shrink-0">
+                <Link
+                  href="/contacto"
+                  className="inline-flex items-center rounded-xl bg-[#203564] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#16284d]"
+                >
+                  Quiero formar parte de SAVIA Huellitas
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="border-t border-gray-100 bg-gray-50">
-        <div className="mx-auto max-w-5xl px-6 py-16 text-center">
-          <h2 className="text-2xl font-bold text-[#203564] md:text-3xl">
-            Una visión integral de la salud
+      {/* Puente hacia SAVIA */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-5xl px-6 py-16 text-center md:py-20">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+            <Globe className="h-7 w-7" />
+          </div>
+
+          <h2 className="mt-6 text-2xl font-bold text-[#203564] md:text-3xl">
+            SAVIA es una red para nuestra comunidad
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-gray-600">
-            En SAVIA entendemos la salud como un proceso integral que incluye
-            prevención, atención profesional, bienestar y participación de la
-            comunidad.
+            Las mascotas también forman parte de nuestras familias. SAVIA
+            Huellitas complementa nuestra red con espacios para encontrar
+            servicios relacionados con su cuidado y bienestar.
+          </p>
+
+          <p className="mx-auto mt-4 max-w-2xl leading-7 text-gray-600">
+            ¿Buscas atención para ti o tu familia? También puedes encontrar
+            profesionales y servicios de salud en SAVIA.
           </p>
 
           <div className="mt-8">
@@ -217,7 +191,8 @@ export default function AreasSaludPage() {
               href="/especialidades"
               className="inline-flex items-center rounded-xl bg-[#203564] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#16284d]"
             >
-              Explorar especialistas
+              Conocer los servicios de salud
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </div>
         </div>

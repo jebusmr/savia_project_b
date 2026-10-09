@@ -73,33 +73,32 @@ export default function Header() {
             </div>
           </div>
 
-          {/* SALUD */}
-          <div className="group relative">
-            <button
-              type="button"
-              className="flex items-center gap-1 transition hover:text-[var(--color-secondary)]"
+        {/* SAVIA HUELLITAS */}
+        <div className="group relative">
+          <button
+            type="button"
+            className="flex items-center gap-1 transition hover:text-[var(--color-secondary)]"
+          >
+            Savia Huellitas
+            <ChevronDown className="h-4 w-4 transition group-hover:rotate-180" />
+          </button>
+
+          <div className="invisible absolute left-0 top-full z-50 mt-4 w-72 translate-y-2 rounded-2xl border border-[var(--color-border)] bg-white p-3 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+            <Link
+              href="/areas_salud"
+              className="block rounded-xl px-4 py-3 transition hover:bg-emerald-50"
             >
-              Salud
-              <ChevronDown className="h-4 w-4 transition group-hover:rotate-180" />
-            </button>
+              <p className="font-semibold">
+                Servicios para mascotas
+              </p>
 
-            <div className="invisible absolute left-0 top-full z-50 mt-4 w-72 translate-y-2 rounded-2xl border border-[var(--color-border)] bg-white p-3 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-
-              <Link
-                href="/areas_salud"
-                className="block rounded-xl px-4 py-3 transition hover:bg-emerald-50"
-              >
-                <p className="font-semibold">
-                  Áreas de salud
-                </p>
-
-                <p className="mt-1 text-xs text-gray-500">
-                  Explora las áreas de atención de SAVIA.
-                </p>
-              </Link>
-
-            </div>
+              <p className="mt-1 text-xs text-gray-500">
+                Encuentra servicios veterinarios y opciones para el cuidado de tus mascotas.
+              </p>
+            </Link>
           </div>
+        </div>
+
 
           {/* COMUNIDAD */}
           <div className="group relative">
