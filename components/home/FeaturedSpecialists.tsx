@@ -46,20 +46,33 @@ interface FeaturedSpecialistsProps {
 export default async function FeaturedSpecialists({
   specialty,
 }: FeaturedSpecialistsProps) {
-  const response = await fetch(
-    `${
-      process.env.NEXT_PUBLIC_APP_URL ??
-      "http://localhost:3000"
-    }/api/specialists`,
-    {
-      cache: "no-store",
+    let specialists: SpecialistFromApi[] = [];
+
+  try {
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_APP_URL ??
+        "http://localhost:3000"
+      }/api/specialists`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+
+      specialists =
+        result.success && Array.isArray(result.data)
+          ? result.data
+          : [];
     }
-  );
-
-  const result = await response.json();
-
-  const specialists: SpecialistFromApi[] =
-    result.success ? result.data : [];
+  } catch (error) {
+    console.error(
+      "Error cargando especialistas destacados:",
+      error
+    );
+  }
 
   const filteredSpecialists = specialty
     ? specialists.filter((specialist) =>
