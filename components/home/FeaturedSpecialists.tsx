@@ -1,4 +1,6 @@
+
 import SpecialistCard from "../ui/SpecialistCard";
+import { prisma } from "@/lib/prisma";
 
 interface SpecialistFromApi {
   id: string;
@@ -30,7 +32,7 @@ interface SpecialistFromApi {
       address: {
         city: string;
         state: string;
-      };
+      } | null;
     };
   }[];
 
@@ -46,30 +48,62 @@ interface FeaturedSpecialistsProps {
 export default async function FeaturedSpecialists({
   specialty,
 }: FeaturedSpecialistsProps) {
-    let specialists: SpecialistFromApi[] = [];
+  let specialists: SpecialistFromApi[] = [];
 
   try {
-    const response = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_APP_URL ??
-        "http://localhost:3000"
-      }/api/specialists`,
-      {
-        cache: "no-store",
-      }
-    );
+    const data = await prisma.specialist.findMany({
+      where: {
+        status: "ACTIVE",
+        specialistverification: {
+          is: {
+            verificationStatus: "VERIFIED",
+          },
+        },
+      },
+      include: {
+        specialistprofile: true,
+        specialistverification: true,
+        specialty: {
+          where: {
+            status: "ACTIVE",
+          },
+          orderBy: {
+            order: "asc",
+          },
+        },
+        specialistattentionarea: {
+          include: {
+            attentionarea: true,
+          },
+        },
+        specialistoffice: {
+          include: {
+            office: {
+              include: {
+                address: true,
+              },
+            },
+          },
+        },
+        availability: {
+          where: {
+            status: "ACTIVE",
+          },
+          orderBy: [
+            { dayOfWeek: "asc" },
+            { startTime: "asc" },
+          ],
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-    if (response.ok) {
-      const result = await response.json();
-
-      specialists =
-        result.success && Array.isArray(result.data)
-          ? result.data
-          : [];
-    }
+    specialists = data as unknown as SpecialistFromApi[];
   } catch (error) {
     console.error(
-      "Error cargando especialistas destacados:",
+      "Error consultando especialistas destacados en Prisma:",
       error
     );
   }
@@ -99,10 +133,8 @@ export default async function FeaturedSpecialists({
       className="bg-white py-14 md:py-16"
     >
       <div className="mx-auto max-w-7xl px-6">
-
         {/* Encabezado */}
         <div className="mb-8 text-center">
-
           <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
             Red SAVIA
           </p>
@@ -114,14 +146,11 @@ export default async function FeaturedSpecialists({
           <p className="mx-auto mt-3 max-w-2xl text-lg text-gray-600">
             {sectionDescription}
           </p>
-
         </div>
 
         {/* Especialistas */}
         {featuredSpecialists.length === 0 ? (
-
           <div className="rounded-2xl border border-gray-200 bg-gray-50 p-8 text-center">
-
             <h3 className="text-lg font-semibold text-[#203564]">
               {specialty
                 ? `Próximamente encontrarás especialistas en ${specialty}`
@@ -132,15 +161,10 @@ export default async function FeaturedSpecialists({
               Estamos integrando profesionales verificados
               a la red SAVIA.
             </p>
-
           </div>
-
         ) : (
-
           <div className="grid gap-8 lg:grid-cols-3">
-
             {featuredSpecialists.map((specialist) => {
-
               const specialistSpecialty =
                 specialist.specialty[0]?.name ??
                 "Profesional de la salud";
@@ -149,12 +173,10 @@ export default async function FeaturedSpecialists({
                 specialist.specialistoffice[0]?.office;
 
               const city =
-                office?.address.city ??
-                "La Piedad";
+                office?.address?.city ?? "La Piedad";
 
               const state =
-                office?.address.state ??
-                "";
+                office?.address?.state ?? "";
 
               const location = state
                 ? `${city}, ${state}`
@@ -197,10 +219,8 @@ export default async function FeaturedSpecialists({
                 />
               );
             })}
-
           </div>
         )}
-
       </div>
     </section>
   );
