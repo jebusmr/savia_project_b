@@ -46,3 +46,13 @@ next-env.d.ts
 /.agents/
 /.claude/
 /.windsurf/
+
+# respaldos locales de bases de datos
+/savia_backup.sql
+/savia_backup_hostinger.sql
+
+# respaldos locales de bases de datos
+/savia_backup.sql
+/savia_backup_hostinger.sql
+/savia_backup_antes_sincronizacion.sql
+/savia_backup_antes_sincronizacion.sqlsavia
