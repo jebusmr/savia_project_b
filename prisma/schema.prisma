@@ -366,3 +366,32 @@ model specialistattentionarea {
   @@index([specialistId])
   @@index([attentionAreaId])
 }
+
+model establishment {
+  id          String   @id @default(cuid())
+  project     String
+  category    String
+  slug        String   @unique
+  name        String
+  description String?  @db.Text
+  phone       String?
+  whatsapp    String?
+  email       String?
+  website     String?
+  image       String?
+  address     String?
+  city        String
+  municipality String?
+  state       String   @default("Michoacán")
+  country     String   @default("México")
+  latitude    Float?
+  longitude   Float?
+  status      String   @default("DRAFT")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([project, category])
+  @@index([project, city])
+  @@index([status])
+}
+
