@@ -1,0 +1,30 @@
+-- CreateTable
+CREATE TABLE `establishment` (
+    `id` VARCHAR(191) NOT NULL,
+    `project` VARCHAR(191) NOT NULL,
+    `category` VARCHAR(191) NOT NULL,
+    `slug` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `description` TEXT NULL,
+    `phone` VARCHAR(191) NULL,
+    `whatsapp` VARCHAR(191) NULL,
+    `email` VARCHAR(191) NULL,
+    `website` VARCHAR(191) NULL,
+    `image` VARCHAR(191) NULL,
+    `address` VARCHAR(191) NULL,
+    `city` VARCHAR(191) NOT NULL,
+    `municipality` VARCHAR(191) NULL,
+    `state` VARCHAR(191) NOT NULL DEFAULT 'Michoacán',
+    `country` VARCHAR(191) NOT NULL DEFAULT 'México',
+    `latitude` DOUBLE NULL,
+    `longitude` DOUBLE NULL,
+    `status` VARCHAR(191) NOT NULL DEFAULT 'DRAFT',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `establishment_slug_key`(`slug`),
+    INDEX `establishment_project_category_idx`(`project`, `category`),
+    INDEX `establishment_project_city_idx`(`project`, `city`),
+    INDEX `establishment_status_idx`(`status`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
