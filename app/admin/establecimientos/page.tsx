@@ -55,10 +55,58 @@ export default function AdminEstablecimientosPage() {
     setCategory(categories[nextProject][0].value);
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    alert("La interfaz está lista. En el siguiente paso conectaremos el formulario con la base de datos.");
+  async function handleSubmit(
+  event: React.FormEvent<HTMLFormElement>
+) {
+  event.preventDefault();
+
+  try {
+    const response = await fetch("/api/admin/establecimientos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project,
+        category,
+        name,
+        description,
+        address,
+        city,
+        municipality,
+        phone,
+        whatsapp,
+        email,
+        website,
+        image,
+        status,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      alert(result.error || "No fue posible guardar el establecimiento.");
+      return;
+    }
+
+    alert("Establecimiento guardado correctamente.");
+
+    setName("");
+    setDescription("");
+    setAddress("");
+    setMunicipality("");
+    setPhone("");
+    setWhatsapp("");
+    setEmail("");
+    setWebsite("");
+    setImage("");
+    setStatus("DRAFT");
+  } catch (error) {
+    console.error("Error guardando establecimiento:", error);
+    alert("No fue posible conectar con el servidor.");
   }
+}
 
   const inputClass =
     "mt-1 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100";
