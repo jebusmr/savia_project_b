@@ -63,9 +63,14 @@ export default function LoginPage() {
         result.data
       );
       setTimeout(() => {
-        router.push("/mi-cuenta");
-        router.refresh();
-      }, 500);
+  const destination =
+    result.data.role === "ADMIN"
+      ? "/admin"
+      : "/mi-cuenta";
+
+  router.push(destination);
+  router.refresh();
+}, 500);
     } catch (error) {
       console.error(
         "Error en inicio de sesión:",
