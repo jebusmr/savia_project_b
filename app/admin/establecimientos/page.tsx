@@ -304,7 +304,7 @@ export default function AdminEstablecimientosPage() {
             <div className="flex flex-col-reverse gap-3 border-t border-gray-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-gray-500">
                 <Building2 size={16} className="mr-1 inline" />
-                El formulario aún no guarda registros en la base de datos.
+                Los establecimientos se guardan en la base de datos de SAVIA.
               </p>
               <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#17365D] px-6 py-3 font-semibold text-white transition hover:bg-[#102A49]">
                 <Save size={18} />
