@@ -198,7 +198,7 @@ export default async function AdminPage() {
               Administración
             </h2>
 
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
 
               {/* Verificaciones */}
 
@@ -242,6 +242,27 @@ export default async function AdminPage() {
                   Ver profesionales →
                 </span>
 
+              </Link>
+
+              {/* Establecimientos */}
+
+              <Link
+                href="/admin/establecimientos"
+                className="rounded-2xl border border-gray-200 bg-white p-6 transition hover:border-emerald-400 hover:shadow-sm"
+              >
+                <h3 className="font-semibold text-[#17365D]">
+                  Establecimientos registrados
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-500">
+                  Administra los establecimientos de salud y servicios
+                  para mascotas de SAVIA.
+                </p>
+
+                <span className="mt-4 inline-block text-sm font-semibold text-emerald-600">
+                  Ver establecimientos →
+                </span>
+                
               </Link>
 
             </div>
