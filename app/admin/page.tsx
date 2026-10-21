@@ -251,7 +251,7 @@ export default async function AdminPage() {
                 className="rounded-2xl border border-gray-200 bg-white p-6 transition hover:border-emerald-400 hover:shadow-sm"
               >
                 <h3 className="font-semibold text-[#17365D]">
-                  Establecimientos registrados
+                  Registro de establecimientos
                 </h3>
 
                 <p className="mt-2 text-sm text-gray-500">
@@ -260,9 +260,9 @@ export default async function AdminPage() {
                 </p>
 
                 <span className="mt-4 inline-block text-sm font-semibold text-emerald-600">
-                  Ver establecimientos →
+                  Registrar establecimiento →
                 </span>
-                
+
               </Link>
 
             </div>
