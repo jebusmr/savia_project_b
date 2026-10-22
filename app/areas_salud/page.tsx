@@ -40,13 +40,14 @@ const huellitasSections = [
     icon: PawPrint,
   },
   {
-    title: "Atención veterinaria",
-    category: "atencion-veterinaria",
+    title: "Atención urgente",
+    category: "atencion-urgente",
     description:
-      "Encuentra opciones de atención veterinaria para tu mascota.",
+      "Encuentra opciones de atención veterinaria urgente para tu mascota.",
     icon: TriangleAlert,
   },
 ];
+
 
 type Establishment = {
   id: string;

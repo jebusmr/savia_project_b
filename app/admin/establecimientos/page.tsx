@@ -18,6 +18,7 @@ import {
 
 type Project = "SAVIA" | "HUELLITAS";
 
+
 const categories: Record<Project, { value: string; label: string }[]> = {
   SAVIA: [
     { value: "laboratorios-estudios", label: "Laboratorios y estudios" },
@@ -28,12 +29,13 @@ const categories: Record<Project, { value: string; label: string }[]> = {
     { value: "atencion-urgente", label: "Atención urgente" },
   ],
   HUELLITAS: [
-    { value: "veterinario", label: "Veterinarios" },
-    { value: "laboratorio", label: "Laboratorios veterinarios" },
-    { value: "servicio", label: "Servicios para mascotas" },
-    { value: "atencion", label: "Atención veterinaria" },
+    { value: "veterinarios-clinicas", label: "Veterinarios y clínicas" },
+    { value: "laboratorios-estudios", label: "Laboratorios y diagnóstico" },
+    { value: "servicios-mascotas", label: "Servicios para mascotas" },
+    { value: "atencion-urgente", label: "Atención urgente" },
   ],
 };
+
 
 export default function AdminEstablecimientosPage() {
   const [project, setProject] = useState<Project>("SAVIA");
