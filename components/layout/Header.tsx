@@ -73,61 +73,14 @@ export default function Header() {
             </div>
           </div>
 
-        {/* SAVIA HUELLITAS */}
-        <div className="group relative">
-          <button
-            type="button"
-            className="flex items-center gap-1 transition hover:text-[var(--color-secondary)]"
+        
+          {/* SAVIA HUELLITAS */}
+          <Link
+            href="/areas_salud"
+            className="transition hover:text-[var(--color-secondary)]"
           >
-            Savia Huellitas
-            <ChevronDown className="h-4 w-4 transition group-hover:rotate-180" />
-          </button>
-
-          <div className="invisible absolute left-0 top-full z-50 mt-4 w-72 translate-y-2 rounded-2xl border border-[var(--color-border)] bg-white p-3 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-            <Link
-              href="/areas_salud/atencion-veterinaria"
-              className="block rounded-xl px-4 py-3 transition hover:bg-emerald-50"
-            >
-              <p className="font-semibold">
-                Servicios para mascotas
-              </p>
-
-              <p className="mt-1 text-xs text-gray-500">
-                Encuentra servicios veterinarios y opciones para el cuidado de tus mascotas.
-              </p>
-            </Link>
-
-            <Link
-              href="/areas_salud/veterinarios"
-              className="block rounded-xl px-4 py-3 transition hover:bg-emerald-50"
-            >
-              <p className="font-semibold">Veterinarios</p>
-              <p className="mt-1 text-xs text-gray-500">
-                Encuentra profesionales para el cuidado de tus mascotas.
-              </p>
-            </Link>
-
-            <Link
-              href="/areas_salud/laboratorios"
-              className="block rounded-xl px-4 py-3 transition hover:bg-emerald-50"
-            >
-              <p className="font-semibold">Laboratorios y estudios</p>
-              <p className="mt-1 text-xs text-gray-500">
-                Consulta opciones de diagnóstico veterinario.
-              </p>
-            </Link>
-
-            <Link
-              href="/areas_salud/servicios"
-              className="block rounded-xl px-4 py-3 transition hover:bg-emerald-50"
-            >
-              <p className="font-semibold">Servicios para mascotas</p>
-              <p className="mt-1 text-xs text-gray-500">
-                Explora servicios y opciones de atención.
-              </p>
-            </Link>
-          </div>
-        </div>
+            SAVIA Huellitas
+          </Link>
 
 
           {/* COMUNIDAD */}
