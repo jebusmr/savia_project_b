@@ -61,8 +61,7 @@ export default function MisionVisionPage() {
                 Ser una organización referente en salud y desarrollo humano,
                 reconocida por integrar personas, profesionales, instituciones,
                 tecnología e información confiable para generar soluciones con
-                impacto social, comenzando en nuestra región y con capacidad de
-                crecer hacia Michoacán y más allá.
+                impacto social.
               </p>
             </div>
           </div>

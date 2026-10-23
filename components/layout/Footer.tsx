@@ -19,7 +19,7 @@ export default function Footer() {
           </h2>
 
           <p className="mt-2 font-semibold text-[var(--color-secondary)]">
-            Agencia Piedadense para la Salud y el Desarrollo A.C.
+            Agencia Integradora para la salud y el desarrollo A.C.
           </p>
 
           <p className="mt-6 leading-7 text-[var(--color-text-light)]">

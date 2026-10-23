@@ -46,7 +46,7 @@ export default function QuienesSomosPage() {
               </h2>
 
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                SAVIA (Agencia Piedadense para la Salud y el Desarrollo A.C.)
+                SAVIA (Agencia Integradora para la salud y el desarrollo A.C.)
                 es una asociación civil sin fines de lucro que impulsa
                 iniciativas orientadas a mejorar el bienestar de las personas
                 y fortalecer el desarrollo de las comunidades.

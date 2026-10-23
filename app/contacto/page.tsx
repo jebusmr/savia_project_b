@@ -102,9 +102,8 @@ export default function ContactoPage() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-gray-600">
-            Nuestro trabajo comienza en La Piedad y la región, con la visión
-            de desarrollar iniciativas que puedan crecer y generar impacto en
-            otras comunidades.
+            Nuestro trabajo comienza con la visión de desarrollar iniciativas 
+            que puedan crecer y generar impacto en otras comunidades.
           </p>
         </div>
       </section>
