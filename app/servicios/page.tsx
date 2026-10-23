@@ -85,8 +85,8 @@ export default function ServiciosPage() {
           </h1>
 
           <p className="mt-5 max-w-3xl text-base leading-7 text-gray-600 md:text-lg md:leading-8">
-            Explora establecimientos y servicios de salud en
-            La Piedad y la región. Selecciona una categoría
+            Explora establecimientos y servicios de salud y
+            selecciona una categoría
             para conocer las opciones disponibles.
           </p>
         </div>
@@ -208,8 +208,7 @@ export default function ServiciosPage() {
               <p className="mt-3 leading-7 text-gray-700">
                 SAVIA busca integrar progresivamente los
                 establecimientos y servicios relacionados
-                con la salud en La Piedad y la región,
-                facilitando el acceso a información útil
+                con la salud, facilitando el acceso a información útil
                 para las personas.
               </p>
             </div>

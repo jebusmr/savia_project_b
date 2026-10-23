@@ -148,7 +148,7 @@ export default function AreasSaludPage() {
 
             <p className="mt-6 max-w-2xl text-base leading-7 text-white md:text-lg">
               Encuentra profesionales, establecimientos y servicios para
-              tus mascotas en La Piedad y la región.
+              tus mascotas.
             </p>
           </div>
         </div>
