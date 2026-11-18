@@ -53,6 +53,123 @@ export async function GET() {
   }
 }
 
+
+export async function PATCH(request: Request) {
+  try {
+    const user = await getCurrentUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: "Debes iniciar sesión." },
+        { status: 401 }
+      );
+    }
+
+    if (user.role !== "ADMIN") {
+      return NextResponse.json(
+        { success: false, error: "No tienes autorización." },
+        { status: 403 }
+      );
+    }
+
+    const body = await request.json();
+
+    const id = typeof body.id === "string" ? body.id : "";
+    const project =
+      typeof body.project === "string" ? body.project : "";
+    const category =
+      typeof body.category === "string" ? body.category : "";
+    const name =
+      typeof body.name === "string" ? body.name.trim() : "";
+    const city =
+      typeof body.city === "string" ? body.city.trim() : "";
+
+    if (!id || !["SAVIA", "HUELLITAS"].includes(project) ||
+        !category || !name || !city) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Faltan datos obligatorios para actualizar.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const existing = await prisma.establishment.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "El establecimiento no existe.",
+        },
+        { status: 404 }
+      );
+    }
+
+    const establishment = await prisma.establishment.update({
+      where: { id },
+      data: {
+        project,
+        category,
+        name,
+        city,
+        description:
+          typeof body.description === "string"
+            ? body.description.trim() || null
+            : null,
+        address:
+          typeof body.address === "string"
+            ? body.address.trim() || null
+            : null,
+        municipality:
+          typeof body.municipality === "string"
+            ? body.municipality.trim() || null
+            : null,
+        phone:
+          typeof body.phone === "string"
+            ? body.phone.trim() || null
+            : null,
+        whatsapp:
+          typeof body.whatsapp === "string"
+            ? body.whatsapp.trim() || null
+            : null,
+        email:
+          typeof body.email === "string"
+            ? body.email.trim() || null
+            : null,
+        website:
+          typeof body.website === "string"
+            ? body.website.trim() || null
+            : null,
+        image:
+          typeof body.image === "string"
+            ? body.image.trim() || null
+            : null,
+        status: body.status === "PUBLISHED" ? "PUBLISHED" : "DRAFT",
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: establishment,
+    });
+  } catch (error) {
+    console.error("Error actualizando establecimiento:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: "No fue posible actualizar el establecimiento.",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+
 export async function POST(request: Request) {
   try {
     const user = await getCurrentUser();

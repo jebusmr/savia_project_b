@@ -244,25 +244,25 @@ export default async function AdminPage() {
 
               </Link>
 
-              {/* Establecimientos */}
+
+              {/* Administración de establecimientos */}
 
               <Link
-                href="/admin/establecimientos"
+                href="/admin/establecimientos/listado"
                 className="rounded-2xl border border-gray-200 bg-white p-6 transition hover:border-emerald-400 hover:shadow-sm"
               >
                 <h3 className="font-semibold text-[#17365D]">
-                  Registro de establecimientos
+                  Administración de establecimientos
                 </h3>
 
                 <p className="mt-2 text-sm text-gray-500">
-                  Administra los establecimientos de salud y servicios
-                  para mascotas de SAVIA.
+                  Consulta, registra y administra los establecimientos de
+                  salud y servicios para mascotas de SAVIA.
                 </p>
 
                 <span className="mt-4 inline-block text-sm font-semibold text-emerald-600">
-                  Registrar establecimiento →
+                  Ver establecimientos →
                 </span>
-
               </Link>
 
             </div>
